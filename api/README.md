@@ -1,4 +1,4 @@
-# Task Management System
+# Task Management API using Nest.JS
 
 * Backend: Nest JS
 * Frontend: React
@@ -14,4 +14,8 @@ $ docker-compose -f task-management-compose.yml up -d
 $ typeorm:migrate
 $ typeorm:run
 $ typeorm:revert
+```
+### Watch 
+```
+$ yarn start:dev
 ```
