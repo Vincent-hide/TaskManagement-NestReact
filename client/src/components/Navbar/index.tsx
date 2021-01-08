@@ -11,15 +11,18 @@ import {
 } from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
 
-export const Navbar: React.FC = () => {
+interface Props {
+  setCreateTaskModalOpen: (b: boolean) => void
+}
 
+export const Navbar: (props: Props) => JSX.Element = (props: Props) => {
   return (
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" style={{flexGrow: 1}}>
           Task Management
         </Typography>
-        <Button variant="contained">Create Task</Button>
+        <Button variant="contained" onClick={() => props.setCreateTaskModalOpen(true)}>Create Task</Button>
       </Toolbar>
     </AppBar>
   );
