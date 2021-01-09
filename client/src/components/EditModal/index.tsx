@@ -4,6 +4,7 @@ import {TaskAPI} from "../../api/task.api";
 import {TaskDTO, TaskStatus} from "../../api/dto/task.dto";
 import {useStyles} from "./style";
 import {getModalStyle} from "../Utility";
+import {toast} from "react-toastify";
 
 interface Props {
   open: boolean;
@@ -39,8 +40,10 @@ export const EditModal = (props: Props) => {
       // to update the home page, right after editing task instead of refreshing a page
       onTaskUpdated(res);
       console.log("Task Edited", res);
+      toast.success(`New Task: "${res.title}" created`);
     } else {
-      console.log("Invalid Input")
+      console.log("Invalid Input");
+      toast.error(`Invalid Input`);
     }
     handleClose();
   };

@@ -2,14 +2,17 @@ import React, {useEffect, useState} from 'react';
 import './App.css';
 import {TaskAPI} from "./api/task.api";
 import {TaskDTO} from "./api/dto/task.dto";
-import {Grid} from "@material-ui/core";
+import {Container, Grid} from "@material-ui/core";
 import {LoadingSpinner} from "./components/LoadingSpinner";
 import {Task} from "./components/Task";
 import {Navbar} from "./components/Navbar";
 import {CreateModal} from "./components/CreateModal";
 import {EditModal} from "./components/EditModal";
 
-export const App:React.FC = () => {
+import "react-toastify/dist/ReactToastify.css";
+import {ToastContainer} from "react-toastify";
+
+export const App: React.FC = () => {
   const [tasks, setTasks] = useState<TaskDTO[]>([]);
   const [createTaskModalOpen, setCreateTaskModalOpen] = useState(false);
   const [updateTaskModalOpen, setUpdateTaskModalOpen] = useState(false);
@@ -27,7 +30,7 @@ export const App:React.FC = () => {
   const updateTask = (task: TaskDTO) => {
     setTasks(
       tasks.map((taskDTO: TaskDTO) => {
-        if(taskDTO.id === task.id) return task;
+        if (taskDTO.id === task.id) return task;
         return taskDTO;
       })
     )
@@ -49,26 +52,43 @@ export const App:React.FC = () => {
 
   return (
     <div className="App">
-      <CreateModal open={createTaskModalOpen} handleClose={() => setCreateTaskModalOpen(false)} onTaskCreated={addTask}/>
-      <EditModal open={updateTaskModalOpen} handleClose={() => setUpdateTaskModalOpen(false)} onTaskUpdated={updateTask} data={taskEdited as TaskDTO}/>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+      />
+
+      <CreateModal open={createTaskModalOpen} handleClose={() => setCreateTaskModalOpen(false)}
+                   onTaskCreated={addTask}/>
+      <EditModal open={updateTaskModalOpen} handleClose={() => setUpdateTaskModalOpen(false)} onTaskUpdated={updateTask}
+                 data={taskEdited as TaskDTO}/>
       <Navbar setCreateTaskModalOpen={setCreateTaskModalOpen}/>
-      <Grid container spacing={1} style={{padding: '10px'}}>
-        {tasks.length !== 0 ? (
-          <>
-            {tasks.map((task: TaskDTO) => {
-              return (
-                <Grid item xs={3} key={task.id}>
-                  <Task data={task} onTaskDelete={deleteTask} onTaskUpdate={handleEditTaskBtnClick}/>
-                </Grid>
-              );
-            })}
-          </>
-        ) : (
-          <div style={{marginTop: 20}}>
-            <LoadingSpinner />
-          </div>
-        )}
-      </Grid>
+
+      <Container style={{marginTop: 50}}>
+        <Grid container spacing={1} style={{padding: '10px'}}>
+          {tasks.length !== 0 ? (
+            <>
+              {tasks.map((task: TaskDTO) => {
+                return (
+                  <Grid item container xs={12} sm={6} md={4} key={task.id} justify="center">
+                    <Task data={task} onTaskDelete={deleteTask} onTaskUpdate={handleEditTaskBtnClick}/>
+                  </Grid>
+                );
+              })}
+            </>
+          ) : (
+            <div style={{marginTop: 20}}>
+              <LoadingSpinner/>
+            </div>
+          )}
+        </Grid>
+      </Container>
     </div>
   );
 }

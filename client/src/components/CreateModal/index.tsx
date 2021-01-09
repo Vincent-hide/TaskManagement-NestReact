@@ -4,6 +4,7 @@ import {TaskAPI} from "../../api/task.api";
 import {TaskDTO} from "../../api/dto/task.dto";
 import {useStyles} from "./style";
 import {getModalStyle} from "../Utility";
+import {toast} from "react-toastify";
 
 interface Props {
   open: boolean;
@@ -24,9 +25,11 @@ export const CreateModal = (props: Props) => {
         description
       });
       props.onTaskCreated(res);
-      console.log("New Task", res);
+      console.log("New Task", res)
+      toast.success(`New Task: "${res.title}" created`);
     } else {
       console.log("Invalid Input")
+      toast.error(`Invalid Input`);
     }
     props.handleClose();
   };
