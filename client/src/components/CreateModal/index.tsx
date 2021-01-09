@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {createStyles, makeStyles, Modal, Theme, TextField, Button} from "@material-ui/core";
 import {TaskAPI} from "../../api/task.api";
 import {TaskDTO} from "../../api/dto/task.dto";
+import {useStyles} from "./style";
+import {getModalStyle} from "../Utility";
 
 interface Props {
   open: boolean;
@@ -9,38 +11,9 @@ interface Props {
   onTaskCreated: (task: TaskDTO) => void
 }
 
-function getModalStyle() {
-  const top = 25;
-  const left = 50;
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      position: 'absolute',
-      width: 400,
-      backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
-    },
-    input: {
-      width: '100%',
-      marginTop: 10
-    },
-  }),
-);
-
-export const TaskModal = (props: Props) => {
+export const CreateModal = (props: Props) => {
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
-  const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState<undefined | string>(undefined);
 
@@ -55,6 +28,7 @@ export const TaskModal = (props: Props) => {
     } else {
       console.log("Invalid Input")
     }
+    props.handleClose();
   };
 
   const body = (

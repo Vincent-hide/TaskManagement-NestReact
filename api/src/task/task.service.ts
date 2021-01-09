@@ -48,7 +48,10 @@ export class TaskService {
     return this.entityToDTO(task);
   }
 
-  public async update(taskId: number | string, updateTaskRequest: UpdateTaskDTO) {
+  public async update(
+    taskId: number | string,
+    updateTaskRequest: UpdateTaskDTO,
+  ) {
     const task: Task = await this.findById(taskId);
     const { title, description, status } = updateTaskRequest;
 
@@ -59,5 +62,10 @@ export class TaskService {
     await this.taskRepository.save(task);
 
     return this.entityToDTO(task);
+  }
+
+  public async delete(taskId: number | string) {
+    const task: Task = await this.findById(taskId);
+    await this.taskRepository.remove(task);
   }
 }

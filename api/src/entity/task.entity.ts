@@ -9,7 +9,7 @@ export enum TaskStatus {
 @Entity()
 export class Task {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number | string;
 
   @Column({nullable: false, length: 64})
   title: string

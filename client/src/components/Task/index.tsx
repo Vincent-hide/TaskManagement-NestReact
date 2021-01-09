@@ -5,10 +5,11 @@ import {TaskAPI} from "../../api/task.api";
 
 interface Props {
   data: TaskDTO,
-  onTaskDelete: (taskId: number | string) => void
+  onTaskDelete: (taskId: number | string) => void;
+  onTaskUpdate: (taskDTO: TaskDTO) => void;
 }
 
-export const Task: ({data, onTaskDelete}: Props) => JSX.Element = ({data, onTaskDelete}: Props) => {
+export const Task: ({data, onTaskDelete, onTaskUpdate}: Props) => JSX.Element = ({data, onTaskDelete, onTaskUpdate}: Props) => {
   const {id, title, description, status} = data;
 
   const deleteTask = async (id: string | number) => {
@@ -31,7 +32,8 @@ export const Task: ({data, onTaskDelete}: Props) => JSX.Element = ({data, onTask
       </CardContent>
       <CardActions>
         <Container>
-          <Button size="small" variant="contained" style={{marginRight: '5px'}} color="primary">Edit</Button>
+          <Button size="small" variant="contained" style={{marginRight: '5px'}} color="primary"
+                  onClick={() => onTaskUpdate(data)}>Edit</Button>
           <Button size="small" variant="contained" style={{marginLeft: '5px'}} color="secondary"
                   onClick={() => deleteTask(id)}>Delete</Button>
         </Container>

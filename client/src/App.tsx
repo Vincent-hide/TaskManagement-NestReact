@@ -6,18 +6,36 @@ import {Grid} from "@material-ui/core";
 import {LoadingSpinner} from "./components/LoadingSpinner";
 import {Task} from "./components/Task";
 import {Navbar} from "./components/Navbar";
-import {TaskModal} from "./components/TaskModal";
+import {CreateModal} from "./components/CreateModal";
+import {EditModal} from "./components/EditModal";
 
 export const App:React.FC = () => {
   const [tasks, setTasks] = useState<TaskDTO[]>([]);
   const [createTaskModalOpen, setCreateTaskModalOpen] = useState(false);
+  const [updateTaskModalOpen, setUpdateTaskModalOpen] = useState(false);
+  const [taskEdited, setTaskEdited] = useState<undefined | TaskDTO>(undefined);
 
   const addTask = (task: TaskDTO) => {
     setTasks([...tasks, task]);
   };
 
+  // to update the home page right after removing the task instead of refreshing a page
   const deleteTask = (taskId: string | number) => {
     setTasks(tasks.filter((task: TaskDTO) => task.id !== taskId))
+  }
+
+  const updateTask = (task: TaskDTO) => {
+    setTasks(
+      tasks.map((taskDTO: TaskDTO) => {
+        if(taskDTO.id === task.id) return task;
+        return taskDTO;
+      })
+    )
+  }
+
+  const handleEditTaskBtnClick = (task: TaskDTO) => {
+    setTaskEdited(task);
+    setUpdateTaskModalOpen(true)
   }
 
   useEffect(() => {
@@ -31,7 +49,8 @@ export const App:React.FC = () => {
 
   return (
     <div className="App">
-      <TaskModal open={createTaskModalOpen} handleClose={() => setCreateTaskModalOpen(false)} onTaskCreated={addTask}/>
+      <CreateModal open={createTaskModalOpen} handleClose={() => setCreateTaskModalOpen(false)} onTaskCreated={addTask}/>
+      <EditModal open={updateTaskModalOpen} handleClose={() => setUpdateTaskModalOpen(false)} onTaskUpdated={updateTask} data={taskEdited as TaskDTO}/>
       <Navbar setCreateTaskModalOpen={setCreateTaskModalOpen}/>
       <Grid container spacing={1} style={{padding: '10px'}}>
         {tasks.length !== 0 ? (
@@ -39,7 +58,7 @@ export const App:React.FC = () => {
             {tasks.map((task: TaskDTO) => {
               return (
                 <Grid item xs={3} key={task.id}>
-                  <Task data={task} onTaskDelete={deleteTask}/>
+                  <Task data={task} onTaskDelete={deleteTask} onTaskUpdate={handleEditTaskBtnClick}/>
                 </Grid>
               );
             })}

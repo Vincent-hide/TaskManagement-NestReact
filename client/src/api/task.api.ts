@@ -1,6 +1,7 @@
 import axios from "axios";
 import {TaskDTO} from "./dto/task.dto";
 import {CreateTaskDTO} from "./dto/create-task.dto";
+import {UpdateTaskDTO} from "./dto/update-task.dto";
 
 export class TaskAPI {
   public static async getAll(): Promise<TaskDTO[]> {
@@ -20,4 +21,11 @@ export class TaskAPI {
       .then(res => res.data)
       .catch(err => err);
   }
+
+  public static async updateOne(taskId: number | string, updateRequest: UpdateTaskDTO) {
+    return await axios.put(`http://localhost:2000/task/${taskId}`, updateRequest)
+      .then(res => res.data)
+      .catch(err => err);
+  }
+
 }
